@@ -21,4 +21,24 @@ def 정제(df):
 	정제된_df = 정제된_df[정제된_df["점수"].between(0, 100)]
 	print(f"점수 범위 필터 후: {len(정제된_df)}행")
 
+	정제된_df = 정제된_df[정제된_df["과목"] == "수학"]
+	print(f"수학 과목 필터 후: {len(정제된_df)}행")
+
+	반별_점수_평균 = 정제된_df.groupby("반")["점수"].mean()
+	print(반별_점수_평균)
+
+	과목별_반별_점수_평균 = 정제된_df.groupby(["과목", "반"])["점수"].mean()
+	print(과목별_반별_점수_평균)
+
 	return 정제된_df
+
+
+def 반별평균(df):
+	반별_통계 = (
+		df.groupby("반")["점수"]
+		.agg(["count", "mean", "median", "max"])
+		.round(2)
+		.rename(columns={"count": "개수", "mean": "평균", "median": "중앙값", "max": "최댓값"})
+	)
+	print(반별_통계)
+	return 반별_통계["평균"]
